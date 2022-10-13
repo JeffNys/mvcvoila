@@ -9,12 +9,17 @@
 			{% block title %}{% endblock %}
 		</title>
 		<link rel="stylesheet" href="/assets/css/style.css">
-        {% block stylesheet %}{% endblock %}
+		<link rel="stylesheet" href="/assets/css/voila-messages.css"> {% block stylesheet %}{% endblock %}
 		<link rel="icon" href="/assets/images/favicon.png">
 	</head>
 
 	<body>
-		{% block content %}{% endblock %}
+		{% include "Partial/_navBar.html.twig" %}
+		{% include "Partial/_messages.html.twig" %}
+		<main>
+			{% block content %}{% endblock %}
+		</main>
+
 		{% block javascript %}{% endblock %}
 	</body>
 </html>
