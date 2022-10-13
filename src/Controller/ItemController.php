@@ -99,7 +99,11 @@ class ItemController extends AbstractController
                 'title' => $_POST['title'],
             ];
             $id = $itemManager->insert($item);
-            $this->addFlash('voila-success', 'item correctly created');
+            if ($id) {
+                $this->addFlash('voila-success', 'item correctly created');
+            } else {
+                $this->addFlash('voila-danger', "there was a problem creating the item");
+            }
             $this->redirectTo("/item");
         }
 
