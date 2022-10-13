@@ -7,10 +7,10 @@ define('APP_DB', "sqlite");
  *
  */
 
-// define('APP_DB_USER', 'user');
-// define('APP_DB_PWD', 'password');
-// define('APP_DB_HOST', 'localhost');
-// define('APP_DB_NAME', 'database_name');
+define('APP_DB_USER', 'user');
+define('APP_DB_PWD', 'password');
+define('APP_DB_HOST', 'localhost');
+define('APP_DB_NAME', 'database_name');
 
 /**
  * This section define sqlite access
