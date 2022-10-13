@@ -29,7 +29,7 @@ class ItemController extends AbstractController
     }
 
 
-    /**
+/**
      * Display item informations specified by $id
      *
      * @param int $id
@@ -41,7 +41,11 @@ class ItemController extends AbstractController
     public function show(int $id)
     {
         $itemManager = new ItemManager();
-        $item = $itemManager->selectOneById($id);
+        $item = $itemManager->find($id);
+        if (!$item) {
+            $this->addFlash("voila-warning", "there is a problem with this item");
+            $this->redirectTo("/item");
+        }
 
         return $this->twig->render('Item/show.html.twig', ['item' => $item]);
     }
@@ -59,11 +63,19 @@ class ItemController extends AbstractController
     public function edit(int $id): string
     {
         $itemManager = new ItemManager();
-        $item = $itemManager->selectOneById($id);
-
+        $item = $itemManager->find($id);
+        if (!$item) {
+            $this->addFlash("voila-warning", "there is a problem with this item");
+            $this->redirectTo("/item");
+        }
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $item['title'] = $_POST['title'];
-            $itemManager->update($item);
+            $update = [
+                'id' => $id,
+                'title' => $_POST['title']
+            ];
+            $itemManager->update($update);
+            $this->addFlash('voila-success', 'item correctly updated');
+            $this->redirectTo("/item");
         }
 
         return $this->twig->render('Item/edit.html.twig', ['item' => $item]);
@@ -87,7 +99,8 @@ class ItemController extends AbstractController
                 'title' => $_POST['title'],
             ];
             $id = $itemManager->insert($item);
-            header('Location:/item/show/' . $id);
+            $this->addFlash('voila-success', 'item correctly created');
+            $this->redirectTo("/item");
         }
 
         return $this->twig->render('Item/add.html.twig');
@@ -103,6 +116,6 @@ class ItemController extends AbstractController
     {
         $itemManager = new ItemManager();
         $itemManager->delete($id);
-        header('Location:/item');
-    }
-}
+        $this->addFlash('voila-success', 'item correctly deleted');
+        $this->redirectTo('/item/index');
+    }}
