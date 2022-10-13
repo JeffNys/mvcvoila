@@ -30,21 +30,29 @@ class Connection
     private function __construct()
     {
         try {
-            $dsn = 'mysql:host=' . self::$host . '; dbname=' . self::$dbName . '; charset=utf8';
-            self::$pdoInstance = new PDO(
-                $dsn,
-                self::$user,
-                self::$password
-            );
+            switch (APP_DB) {
+                case "mysql":
+                    $dsn = 'mysql:host=' . self::$host . '; dbname=' . self::$dbName . '; charset=utf8';
+                    self::$pdoInstance = new PDO(
+                        $dsn,
+                        self::$user,
+                        self::$password
+                    );
+                    break;
+                case "sqlite":
+                    self::$pdoInstance = new PDO('sqlite:' . APP_DB_PATH);
+                    break;
+            }
             self::$pdoInstance->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
-
             // show errors in DEV environment
             if (!APP_PROD) {
-                self::$pdoInstance->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            self::$pdoInstance->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             }
         } catch (\PDOException $e) {
             echo ('Error !: ' . $e->getMessage());
         }
+        
+        
     }
 
 
