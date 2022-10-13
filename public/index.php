@@ -1,4 +1,12 @@
 <?php
+// 12 hours server session life
+session_start([
+    "cookie_lifetime" => 0,
+    "gc_maxlifetime" => 43200,
+    "name" => "voila_sess_id",
+    "cookie_httponly" => true,
+    "cookie_samesite" => "Strict",
+]);
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
