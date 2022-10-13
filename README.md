@@ -1,4 +1,4 @@
-# Simple MVC
+# Voila mini framework
 
 ## Description
 
@@ -6,6 +6,10 @@ This repository is a simple PHP MVC structure from scratch.
 
 It uses some cool vendors/libraries such as Twig or whoops debuger.
 For this one, just a simple example where users can choose one of their databases and see tables in it.
+
+## Version
+
+Actualy the last stable version is: voila 1.2
 
 ## Steps
 
