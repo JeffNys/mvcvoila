@@ -38,7 +38,7 @@ If you develop on Windows, you should edit you git configuration to change your 
 
 ## How does URL routing work ?
 
-* .htaccess file creates url rewrite
+* url is rewrited by web server
 * the first element of the url is the domain name
 * the second element bears the name of the controller (without controller, by default Home)
 * the third element indicates the method to use in the controller (by default, index)
