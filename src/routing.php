@@ -2,8 +2,6 @@
 
 /**
  * This file dispatch routes.
- *
- * PHP version 7
  */
 
 $routeParts = explode('/', ltrim($_SERVER['REQUEST_URI'], '/') ?: HOME_PAGE);
