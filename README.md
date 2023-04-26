@@ -9,7 +9,7 @@ For this one, just a simple example where users can choose one of their database
 
 ## Version
 
-Actualy the last stable version is: voila 1.2
+Actualy the last stable version is: voila 1.4
 
 ## Steps
 
