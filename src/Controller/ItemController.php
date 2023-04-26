@@ -29,7 +29,7 @@ class ItemController extends AbstractController
     }
 
 
-/**
+    /**
      * Display item informations specified by $id
      *
      * @param int $id
@@ -68,14 +68,17 @@ class ItemController extends AbstractController
             $this->addFlash("voila-warning", "there is a problem with this item");
             $this->redirectTo("/item");
         }
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $tokenValid = $this->checkToken($_POST['token'] ?? "");
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && $tokenValid) {
             $update = [
                 'id' => $id,
-                'title' => $_POST['title']
+                'title' => $_POST['title'],
             ];
             $itemManager->update($update);
             $this->addFlash('voila-success', 'item correctly updated');
             $this->redirectTo("/item");
+        } elseif ($_SERVER['REQUEST_METHOD'] === 'POST' && !$tokenValid) {
+            $this->addFlash("voila-danger", "There is an attempt to post a form outside of the site's submission rules, or you session time is done");
         }
 
         return $this->twig->render('Item/edit.html.twig', ['item' => $item]);
@@ -92,8 +95,9 @@ class ItemController extends AbstractController
      */
     public function add()
     {
+        $tokenValid = $this->checkToken($_POST['token'] ?? "");
 
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && $tokenValid) {
             $itemManager = new ItemManager();
             $item = [
                 'title' => $_POST['title'],
@@ -105,6 +109,8 @@ class ItemController extends AbstractController
                 $this->addFlash('voila-danger', "there was a problem creating the item");
             }
             $this->redirectTo("/item");
+        } elseif ($_SERVER['REQUEST_METHOD'] === 'POST' && !$tokenValid) {
+            $this->addFlash("voila-danger", "There is an attempt to post a form outside of the site's submission rules, or you session time is done");
         }
 
         return $this->twig->render('Item/add.html.twig');
@@ -116,10 +122,19 @@ class ItemController extends AbstractController
      *
      * @param int $id
      */
-    public function delete(int $id)
+    public function delete()
     {
         $itemManager = new ItemManager();
-        $itemManager->delete($id);
-        $this->addFlash('voila-success', 'item correctly deleted');
+        $tokenValid = $this->checkToken($_POST['token'] ?? "");
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && $tokenValid) {
+            $id = $_POST['item'];
+            $itemManager->delete($id);
+            $this->addFlash('voila-success', 'item correctly deleted');
+        } elseif ($_SERVER['REQUEST_METHOD'] === 'POST' && !$tokenValid) {
+            $this->addFlash("voila-danger", "There is an attempt to post a form outside of the site's submission rules, or you session time is done");
+        }
+
         $this->redirectTo('/item/index');
-    }}
+    }
+}
