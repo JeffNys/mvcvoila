@@ -42,6 +42,19 @@ abstract class AbstractController
             return $messages;
         });
         $this->twig->addFunction($getFlash);
+        $getToken = new TwigFunction('getToken', function () {
+            if (isset($_SESSION['token'])) {
+                $token = $_SESSION['token'];
+            } else {
+                $token = uniqid(rand(), true);
+            }
+            $_SESSION['token'] = $token;
+            $hidden = '<input type="hidden" name="token" id="token" value="' .
+                $token .
+                '">';
+            return $hidden;
+        });
+        $this->twig->addFunction($getToken);
     }
 
     public function addFlash(string $color, string $message): void
@@ -57,5 +70,17 @@ abstract class AbstractController
     {
         header("Location: $route");
         exit;
+    }
+
+    public function checkToken(string $token): bool
+    {
+        $validToken = false;
+        $sessionToken = $_SESSION['token'] ?? "";
+        if ($sessionToken && $token) {
+            if ($_SESSION['token'] == $token) {
+                $validToken = true;
+            }
+        }
+        return $validToken;
     }
 }

@@ -1,10 +1,11 @@
 <?php
+
 define('APP_DB', "sqlite");
 // define('APP_DB', "mysql");
 
 /**
- * This file define mysql BD access infos.
- *
+ * This section define mysql access
+ * if you use mysql
  */
 
 define('APP_DB_USER', 'user');

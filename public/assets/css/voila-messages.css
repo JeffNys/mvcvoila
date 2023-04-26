@@ -1,7 +1,7 @@
 .voila-info,
 .voila-success,
 .voila-warning,
-.voila-error {
+.voila-danger {
     font-family: Arial, Helvetica, sans-serif;
     font-size: 13px;
     border: 1px solid;
@@ -30,7 +30,7 @@
     background-image: url('../images/warning.png');
 }
 
-.voila-error {
+.voila-danger {
     color: #D8000C;
     background-color: #FFBABA;
     background-image: url('../images/error.png');
