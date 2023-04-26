@@ -11,6 +11,8 @@ For this one, just a simple example where users can choose one of their database
 
 Actualy the last stable version is: voila 1.4
 
+you are in development version 1.5
+
 
 ## Steps
 
