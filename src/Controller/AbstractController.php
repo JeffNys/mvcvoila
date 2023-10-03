@@ -26,7 +26,7 @@ abstract class AbstractController
         } else {
             $this->twig = new Environment($loader, [
                 "debug" => true,
-                ]);
+            ]);
         }
         $this->twig->addExtension(new DebugExtension());
         if (isset($_SESSION["user"])) {
@@ -82,5 +82,45 @@ abstract class AbstractController
             }
         }
         return $validToken;
+    }
+
+    public function stripData(array $data): array
+    {
+        function stripThisLevel($dataForThisLevel)
+        {
+            $strippedDataForThisLevel = [];
+            if (gettype($dataForThisLevel) == 'string') {
+                return strip_tags($dataForThisLevel);
+            }
+            if (gettype($dataForThisLevel) == 'integer') {
+                return $dataForThisLevel;
+            }
+            if (gettype($dataForThisLevel) == 'array') {
+                foreach ($dataForThisLevel as $keyNextLevel => $valueNextLevel) {
+                    $strippedDataForThisLevel[$keyNextLevel] = stripThisLevel($valueNextLevel);
+                }
+            } else {
+                return $dataForThisLevel;
+            }
+            return $strippedDataForThisLevel;
+        }
+
+        $strippedData = [];
+        foreach ($data as $key => $value) {
+            $strippedData[$key] = stripThisLevel($value);
+        }
+        return $strippedData;
+    }
+
+    public function APIGetResponse(array $data, int $status = 200, string $allowedMethod = 'GET'): string
+    {
+        header('Access-Control-Allow-Origin: *'); //public API
+        header('Content-Type: application/json; charset-UTF-8');
+        header('Access-Control-Allow-Methods: ' . $allowedMethod);
+        header('Access-Control-Max-Age: 3600');
+        header('Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With');
+        http_response_code($status);
+        // $data = $this->stripData($data);
+        return json_encode($data);
     }
 }
