@@ -1,11 +1,11 @@
 {% extends 'layout.html.twig' %}
 
 {% block content %}
-	<h1>Item
-		{{ item.title }}</h1>
-	<p>{{ item.id }}.
-		{{ item.title }}</p>
-	<a href="/item/edit/{{ item.id }}">Edit</a>
-	<br>
-	<a href="/item">Back to list</a>
+  <h1>Item
+    {{ item.title }}</h1>
+  <p>{{ item.id }}.
+    {{ item.title }}</p>
+  <a href="{{ domain('/item/edit/' ~ item.id) }}">Edit</a>
+  <br>
+  <a href="{{ domain('/item') }}">Back to list</a>
 {% endblock %}

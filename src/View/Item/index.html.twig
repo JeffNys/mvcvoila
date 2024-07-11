@@ -1,17 +1,17 @@
 {% extends 'layout.html.twig' %}
 
 {% block content %}
-	<h1>Items</h1>
-	<p>the items pages are just to give an example, you can remove them if you don't need them</p>
-	<ul>
-		{% for item in items %}
-			<li>
-				<a href="/item/show/{{ item.id }}">{{ item.id }}.
-					{{ item.title }}</a>
-			</li>
-		{% else %}
-			<li>Nothing to display</li>
-		{% endfor %}
-	</ul>
-	<a href="/item/add">Add</a>
+  <h1>Items</h1>
+  <p>the items pages are just to give an example, you can remove them if you don't need them</p>
+  <ul>
+    {% for item in items %}
+      <li>
+        <a href="{{ domain('/item/show/' ~ item.id) }}">{{ item.id }}.
+          {{ item.title }}</a>
+      </li>
+    {% else %}
+      <li>Nothing to display</li>
+    {% endfor %}
+  </ul>
+  <a href="{{ domain('/item/add') }}">Add</a>
 {% endblock %}

@@ -55,6 +55,13 @@ abstract class AbstractController
             return $hidden;
         });
         $this->twig->addFunction($getToken);
+        $domain = new TwigFunction('domain', function (string $value) {
+            $host = $_SERVER['HTTP_HOST'];
+            $http = FORCE_HTTPS ? 'https://' : 'http://';
+            $url = $http . $host . $value;
+            return $url;
+        });
+        $this->twig->addFunction($domain);
     }
 
     public function addFlash(string $color, string $message): void
