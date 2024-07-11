@@ -4,6 +4,7 @@
  * This file define config constants .
  *
  */
+define('FORCE_HTTPS', false);
 
 
 define('APP_PROD', false);

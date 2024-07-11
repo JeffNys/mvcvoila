@@ -26,7 +26,7 @@ abstract class AbstractController
         } else {
             $this->twig = new Environment($loader, [
                 "debug" => true,
-                ]);
+            ]);
         }
         $this->twig->addExtension(new DebugExtension());
         if (isset($_SESSION["user"])) {
@@ -82,5 +82,33 @@ abstract class AbstractController
             }
         }
         return $validToken;
+    }
+
+    public function stripData(array $data): array
+    {
+        function stripThisLevel($dataForThisLevel)
+        {
+            $strippedDataForThisLevel = [];
+            if (gettype($dataForThisLevel) == 'string') {
+                return strip_tags($dataForThisLevel);
+            }
+            if (gettype($dataForThisLevel) == 'integer') {
+                return $dataForThisLevel;
+            }
+            if (gettype($dataForThisLevel) == 'array') {
+                foreach ($dataForThisLevel as $keyNextLevel => $valueNextLevel) {
+                    $strippedDataForThisLevel[$keyNextLevel] = stripThisLevel($valueNextLevel);
+                }
+            } else {
+                return $dataForThisLevel;
+            }
+            return $strippedDataForThisLevel;
+        }
+
+        $strippedData = [];
+        foreach ($data as $key => $value) {
+            $strippedData[$key] = stripThisLevel($value);
+        }
+        return $strippedData;
     }
 }
