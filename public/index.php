@@ -15,5 +15,8 @@ require_once __DIR__ . '/../config/db.php';
 if (!APP_PROD) {
     require_once __DIR__ . '/../config/debug.php';
 }
+if (FORCE_HTTPS) {
+    require_once __DIR__ . '/../voila/checkHttps.php';
+}
 
 require_once __DIR__ . '/../src/routing.php';
