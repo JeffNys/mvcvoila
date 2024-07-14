@@ -6,6 +6,7 @@ use Twig\Environment;
 use Twig\TwigFunction;
 use Twig\Loader\FilesystemLoader;
 use Twig\Extension\DebugExtension;
+use Voila\Translate\TranslateTokenParser;
 
 abstract class AbstractController
 {
@@ -22,7 +23,9 @@ abstract class AbstractController
     {
         $loader = new FilesystemLoader(APP_VIEW_PATH);
         if (APP_PROD) {
-            $this->twig = new Environment($loader);
+            $this->twig = new Environment($loader, [
+                "cache" => ROOT . 'voila/twigCache/',
+            ]);
         } else {
             $this->twig = new Environment($loader, [
                 "debug" => true,
@@ -62,6 +65,8 @@ abstract class AbstractController
             return $url;
         });
         $this->twig->addFunction($domain);
+
+        $this->twig->addTokenParser(new TranslateTokenParser());
     }
 
     public function addFlash(string $color, string $message): void
@@ -117,5 +122,15 @@ abstract class AbstractController
             $strippedData[$key] = stripThisLevel($value);
         }
         return $strippedData;
+    }
+
+    public function translate(string $data): string
+    {
+        if (TRANSLATE) {
+            // do something
+            return $data;
+        } else {
+            return $data;
+        }
     }
 }
