@@ -12,7 +12,7 @@ define('APP_PROD', false);
  * translate constants
  * 
  */
-define('TRANSLATE', false);
+define('TRANSLATE', true);
 define('DEFAULT_LANG', 'en');
 define('LANGS', ['en']);
 

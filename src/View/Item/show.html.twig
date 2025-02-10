@@ -1,11 +1,15 @@
 {% extends 'layout.html.twig' %}
 
+{% block title %}{{ translate("Item") }}
+  {{ item.title }}
+{% endblock %}
+
 {% block content %}
-  <h1>Item
+  <h1>{{ translate("Item") }}
     {{ item.title }}</h1>
   <p>{{ item.id }}.
     {{ item.title }}</p>
-  <a href="{{ domain('/item/edit/' ~ item.id) }}">Edit</a>
+  <a href="{{ domain('/item/edit/' ~ item.id) }}">{{ translate("Edit") }}</a>
   <br>
-  <a href="{{ domain('/item') }}">Back to list</a>
+  <a href="{{ domain('/item') }}">{{ translate("Back to list") }}</a>
 {% endblock %}

@@ -1,7 +1,10 @@
 <?php
 
+require_once __DIR__ . '/../config/config.php';
+
 $controllerPath = __DIR__ . '/../src/Controller/';
 $viewPath = __DIR__ . '/../src/View/';
+$transPath = __DIR__ . '/../translation/';
 
 $controllers = findFiles($controllerPath);
 $views = findFiles($viewPath);
@@ -9,19 +12,26 @@ $views = findFiles($viewPath);
 $sentences = [];
 
 foreach ($controllers as $controller) {
-  if (strpos($controller, "AbstractController.php")) continue;
-  $newSentences = getTranslate($controller);
-  if ($newSentences) {
-    foreach ($newSentences as $newSentence) {
-      if ($newSentence) {
-        $sentences[] = $newSentence;
+  $tempResult = strpos($controller["file"], "AbstractController.php");
+  if (gettype($tempResult) == "integer") {
+    $abstractController = true;
+  } else {
+    $abstractController = false;
+  }
+  if (!$abstractController) {
+    $newSentences = getTranslate($controller);
+    if ($newSentences) {
+      foreach ($newSentences as $newSentence) {
+        if ($newSentence) {
+          $sentences[] = $newSentence;
+        }
       }
     }
   }
 }
 
 foreach ($views as $view) {
-  $newSentences = getTrans($view);
+  $newSentences = getTranslate($view);
   if ($newSentences) {
     foreach ($newSentences as $newSentence) {
       if ($newSentence) {
@@ -31,7 +41,40 @@ foreach ($views as $view) {
   }
 }
 
-var_dump($sentences);
+
+if (!empty($argv[1])) {
+  $locale = $argv[1];
+  if (!in_array($locale, LANGS)) {
+    echo "This language is not supported\n";
+    echo "Supported languages: " . implode(", ", LANGS) . "\n";
+    echo "Default language is " . DEFAULT_LANG . "\n";
+    echo "You can add a new language in config/config.php\n";
+    $locale = DEFAULT_LANG;
+  }
+} else {
+  $locale = DEFAULT_LANG;
+}
+
+
+if (file_exists($transPath . "$locale.json")) {
+  $translations = json_decode(file_get_contents($transPath . "$locale.json"), true);
+  foreach ($sentences as $sentence) {
+    if (!array_key_exists($sentence, $translations)) {
+      $translations[$sentence] = "__$sentence";
+    }
+  }
+  $translations = json_encode($translations, JSON_PRETTY_PRINT);
+  file_put_contents($transPath . "$locale.json", $translations);
+  echo "File $locale.json updated in translation folder\n";
+} else {
+  $translations = [];
+  foreach ($sentences as $sentence) {
+    $translations[$sentence] = "__$sentence";
+  }
+  $translations = json_encode($translations, JSON_PRETTY_PRINT);
+  file_put_contents($transPath . "$locale.json", $translations);
+  echo "File $locale.json created in translation folder\n";
+}
 
 
 
@@ -53,80 +96,37 @@ function findFiles(string $directory): array
     if ($value === '.' || $value === '..') {
       continue;
     }
-    if (is_file("$directory/$value")) {
-      $result[] = "$directory/$value";
-      continue;
-    }
-    foreach (findFiles("$directory/$value") as $value) {
-      $result[] = $value;
+    if (is_file($directory . $value)) {
+      $result[] = [
+        "file" => "$value",
+        "directory" => "$directory",
+      ];
+    } else {
+      $subdir = findFiles($directory . $value . '/');
+      foreach ($subdir as $value) {
+        $result[] = $value;
+      }
     }
   }
   return $result;
 }
 
-function getTranslate(string $file): array
+function getTranslate(array $file): array
 {
   $sentences = [];
-  if (is_file($file)) {
-    $content = file_get_contents($file);
-    $offset = 0;
-    $infiniteLoop = 1000;
-    do {
-      $pos = 0;
-      $pos = strpos($content, 'translate', $offset);
-      if ($pos) {
-        preg_match("/translate\\([^)]*\\)/i", $content, $sentencesInFile, PREG_OFFSET_CAPTURE, $offset);
-        $offset = $sentencesInFile[0][1];
-        $offset += 11;
-        $sentence = $sentencesInFile[0][0];
-        // $sentence = strtr("translate(\"", $sentence, "");
-        $sentence = substr($sentence, 11, -2);
-        $sentences[] = $sentence;
-        $sentencesInFile = [];
-      } else {
-        $pos = 0;
-      }
-      if ($infiniteLoop < 0) {
-        $pos = 0;
-      } else {
-        $infiniteLoop--;
-      }
-    } while ($pos);
-  }
-  return $sentences;
-}
-
-function getTrans(string $file): array
-{
-  $sentences = [];
-  if (is_file($file)) {
-
-    $content = file_get_contents($file);
-    $offset = 0;
-    $infiniteLoop = 1000;
-    do {
-      $pos = 0;
-      $pos = strpos($content, 'trans', $offset);
-      if ($pos) {
-        preg_match("/\{% trans %\}[A-Za-z]+\{% endtrans %\}/i", $content, $sentencesInFile, PREG_OFFSET_CAPTURE, $offset);
-        $offset = $sentencesInFile[0][1] ?? $offset;
-        $offset += 11;
-        $sentence = $sentencesInFile[0][0] ?? "{% trans %}{% endtrans %}";
-        // $sentence = strtr("translate(\"", $sentence, "");
-        $sentence = substr($sentence, 11, -14);
-        if ($sentence) {
-          $sentences[] = $sentence;
-        }
-        $sentencesInFile = [];
-      } else {
-        $pos = 0;
-      }
-      if ($infiniteLoop < 0) {
-        $pos = 0;
-      } else {
-        $infiniteLoop--;
-      }
-    } while ($pos);
+  $pathFile = $file["directory"] . "/" . $file["file"];
+  if (is_file($pathFile)) {
+    $content = file_get_contents($pathFile);
+    $sentencesInFile = [];
+    // trouver toute les chaines de caractère comprises entre translate(" et ")
+    preg_match_all("/translate\(\"(.*?)\"\)/i", $content, $sentencesInFile);
+    foreach ($sentencesInFile[1] as $sentence) {
+      $sentences[] = $sentence;
+    }
+    preg_match_all("/translate\('(.*?)'\)/i", $content, $sentencesInFile2);
+    foreach ($sentencesInFile2[1] as $sentence) {
+      $sentences[] = $sentence;
+    }
   }
   return $sentences;
 }

@@ -1,26 +1,26 @@
 <!doctype html>
-<html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<meta http-equiv="x-ua-compatible" content="ie=edge">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
+<html lang="{{ appLang }}">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-		<title>
-			{% block title %}{% endblock %}
-		</title>
-		<link rel="stylesheet" href="/assets/css/style.css">
-		<link rel="stylesheet" href="/assets/css/voila-messages.css">
-        {% block stylesheet %}{% endblock %}
-		<link rel="icon" href="/assets/images/favicon.png">
-	</head>
+    <title>
+      {% block title %}{% endblock %}
+    </title>
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="/assets/css/voila-messages.css">
+    {% block stylesheet %}{% endblock %}
+    <link rel="icon" href="/assets/images/favicon.png">
+  </head>
 
-	<body>
-		{% include "Partial/_navBar.html.twig" %}
-		{% include "Partial/_messages.html.twig" %}
-		<main>
-			{% block content %}{% endblock %}
-		</main>
+  <body>
+    {% include "Partial/_navBar.html.twig" %}
+    {% include "Partial/_messages.html.twig" %}
+    <main>
+      {% block content %}{% endblock %}
+    </main>
 
-		{% block javascript %}{% endblock %}
-	</body>
+    {% block javascript %}{% endblock %}
+  </body>
 </html>

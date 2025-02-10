@@ -1,12 +1,12 @@
 {% extends 'layout.html.twig' %}
 
 {% block content %}
-  <h1>Add a new item</h1>
+  <h1>{{ translate("Add a new item") }}</h1>
   <form method="post">
     <input type="hidden" value="{{ item.id }}" name="id">
     <input type="text" value="{{ item.title }}" name="title">
     {{ getToken()|raw }}
-    <input type="submit" value="Add">
+    <input type="submit" value="{{ translate('Add') }}">
   </form>
-  <a href="{{ domain('/item') }}">back to list</a>
+  <a href="{{ domain('/item') }}">{{ translate("back to list") }}</a>
 {% endblock %}

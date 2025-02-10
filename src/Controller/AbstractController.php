@@ -6,7 +6,7 @@ use Twig\Environment;
 use Twig\TwigFunction;
 use Twig\Loader\FilesystemLoader;
 use Twig\Extension\DebugExtension;
-use Voila\Translate\TranslateTokenParser;
+use Voila\Translate\GetTranslation;
 
 abstract class AbstractController
 {
@@ -21,6 +21,8 @@ abstract class AbstractController
      */
     public function __construct()
     {
+        $_SESSION['locale'] = $_SESSION['locale'] ?? DEFAULT_LANG;
+
         $loader = new FilesystemLoader(APP_VIEW_PATH);
         if (APP_PROD) {
             $this->twig = new Environment($loader, [
@@ -30,11 +32,14 @@ abstract class AbstractController
             $this->twig = new Environment($loader, [
                 "debug" => true,
             ]);
+            $this->twig->addExtension(new DebugExtension());
         }
-        $this->twig->addExtension(new DebugExtension());
         if (isset($_SESSION["user"])) {
             $this->twig->addGlobal("appUser", $_SESSION["user"]);
         }
+        $this->twig->addGlobal("appLang", $_SESSION['locale']);
+        $this->twig->addGlobal("appLangs", LANGS);
+
         $getFlash = new TwigFunction('getFlash', function () {
             $messages = [];
             if (isset($_SESSION['flash'])) {
@@ -45,6 +50,8 @@ abstract class AbstractController
             return $messages;
         });
         $this->twig->addFunction($getFlash);
+
+
         $getToken = new TwigFunction('getToken', function () {
             if (isset($_SESSION['token'])) {
                 $token = $_SESSION['token'];
@@ -58,6 +65,8 @@ abstract class AbstractController
             return $hidden;
         });
         $this->twig->addFunction($getToken);
+
+
         $domain = new TwigFunction('domain', function (string $value) {
             $host = $_SERVER['HTTP_HOST'];
             $http = FORCE_HTTPS ? 'https://' : 'http://';
@@ -66,7 +75,10 @@ abstract class AbstractController
         });
         $this->twig->addFunction($domain);
 
-        $this->twig->addTokenParser(new TranslateTokenParser());
+        $translate = new TwigFunction('translate', function (string $value) {
+            return $this->translate($value);
+        });
+        $this->twig->addFunction($translate);
     }
 
     public function addFlash(string $color, string $message): void
@@ -127,8 +139,17 @@ abstract class AbstractController
     public function translate(string $data): string
     {
         if (TRANSLATE) {
-            // do something
-            return $data;
+            $locale = $_SESSION['locale'];
+            $translations = GetTranslation::getTrans($locale);
+            if ($translations) {
+                if (array_key_exists($data, $translations)) {
+                    return $translations[$data];
+                } else {
+                    return "$data";
+                }
+            } else {
+                return "$data";
+            }
         } else {
             return $data;
         }
