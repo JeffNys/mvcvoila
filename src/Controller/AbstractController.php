@@ -68,9 +68,13 @@ abstract class AbstractController
 
 
         $domain = new TwigFunction('domain', function (string $value) {
-            $host = $_SERVER['HTTP_HOST'];
-            $http = FORCE_HTTPS ? 'https://' : 'http://';
-            $url = $http . $host . $value;
+            if (FORCE_HTTPS) {
+                $host = $_SERVER['HTTP_HOST'];
+                $http = 'https://';
+                $url = $http . $host . $value;
+            } else {
+                $url = $value;
+            }
             return $url;
         });
         $this->twig->addFunction($domain);

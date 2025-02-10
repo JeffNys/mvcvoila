@@ -15,7 +15,7 @@ class HomeController extends AbstractController
      */
     public function index()
     {
-        $this->addFlash("voila-success", $this->translate("this is a test"));
+        $this->addFlash("voila-success", $this->translate("this is a flash message"));
         return $this->twig->render('Home/index.html.twig');
     }
 }
