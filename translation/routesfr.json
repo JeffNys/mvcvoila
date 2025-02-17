@@ -1,14 +1,14 @@
 {
-  "/Error": "/fr/Erreur",
-  "/Error/error404": "/fr/Erreur/erreur404",
-  "/Error/index": "/fr/Erreur/index",
-  "/Home": "/fr/Accueil",
-  "/Home/index": "/fr/Accueil/index",
-  "/Item": "/fr/Objet",
-  "/Item/index": "/fr/Objet/index",
-  "/Item/show": "/fr/Objet/voir",
-  "/Item/edit": "/fr/Objet/modifier",
-  "/Item/add": "/fr/Objet/ajouter",
-  "/Item/delete": "/fr/Objet/supprimer",
-  "/home": "/fr"
+    "\/Error": "\/fr\/Error",
+    "\/Error\/error404": "\/fr\/Error\/error404",
+    "\/Error\/index": "\/fr\/Error\/index",
+    "\/Home": "\/fr\/Home",
+    "\/Home\/index": "\/fr\/Home\/index",
+    "\/Item": "\/fr\/Item",
+    "\/Item\/index": "\/fr\/Item\/index",
+    "\/Item\/show": "\/fr\/Item\/show",
+    "\/Item\/edit": "\/fr\/Item\/edit",
+    "\/Item\/add": "\/fr\/Item\/add",
+    "\/Item\/delete": "\/fr\/Item\/delete",
+    "\/home": "\/fr"
 }

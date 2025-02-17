@@ -7,6 +7,7 @@ use Twig\TwigFunction;
 use Twig\Loader\FilesystemLoader;
 use Twig\Extension\DebugExtension;
 use Voila\Translate\GetTranslation;
+use Voila\Translate\GetRouteTranslation;
 
 abstract class AbstractController
 {
@@ -68,14 +69,7 @@ abstract class AbstractController
 
 
         $domain = new TwigFunction('domain', function (string $value) {
-            if (FORCE_HTTPS) {
-                $host = $_SERVER['HTTP_HOST'];
-                $http = 'https://';
-                $url = $http . $host . $value;
-            } else {
-                $url = $value;
-            }
-            return $url;
+            return $this->getUrl($value);
         });
         $this->twig->addFunction($domain);
 
@@ -83,6 +77,30 @@ abstract class AbstractController
             return $this->translate($value);
         });
         $this->twig->addFunction($translate);
+    }
+
+    private function getUrl(string $route): string
+    {
+        if (TRANSLATE) {
+            $locale = $_SESSION['locale'];
+            $translations = GetRouteTranslation::getTrans($locale);
+            if ($translations) {
+                // insensitive case
+                $translations = array_change_key_case($translations, CASE_LOWER);
+                $route = strtolower($route);
+                if ($route == '/') {
+                    return "/$locale";
+                } else if (array_key_exists($route, $translations)) {
+                    return $translations[$route];
+                } else {
+                    return "$route";
+                }
+            } else {
+                return "$route";
+            }
+        } else {
+            return $route;
+        }
     }
 
     public function addFlash(string $color, string $message): void

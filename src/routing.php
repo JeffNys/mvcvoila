@@ -12,7 +12,13 @@ if (TRANSLATE) {
         $_SESSION['locale'] = $localeUrl;
         $routesTranslations = Voila\Translate\GetRouteTranslation::getTrans($localeUrl);
         if ($routesTranslations) {
-            $translatedRequest = array_search($_SERVER['REQUEST_URI'], $routesTranslations);
+            // insensitive case search
+            foreach ($routesTranslations as $key => $value) {
+                if (strtolower($value) === strtolower($_SERVER['REQUEST_URI'])) {
+                    $translatedRequest = $key;
+                    break;
+                }
+            }
             $routeParts = explode('/', ltrim($translatedRequest, '/') ?: HOME_PAGE);
         }
     }

@@ -21,5 +21,5 @@ define('LANGS', ['en', 'fr']);
 define('APP_VIEW_PATH', __DIR__ . '/../src/View/');
 
 // constants for voila
-define('HOME_PAGE', 'home');
+define('HOME_PAGE', 'Home');
 define('ROOT', __DIR__ . '/../');
