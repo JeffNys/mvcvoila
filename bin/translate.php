@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__ . '/../config/config.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 
 $controllerPath = __DIR__ . '/../src/Controller/';
 $viewPath = __DIR__ . '/../src/View/';
@@ -11,6 +12,7 @@ $views = findFiles($viewPath);
 
 $sentences = [];
 
+// find all sentences in controllers
 foreach ($controllers as $controller) {
   $tempResult = strpos($controller["file"], "AbstractController.php");
   if (gettype($tempResult) == "integer") {
@@ -30,6 +32,7 @@ foreach ($controllers as $controller) {
   }
 }
 
+// find all sentences in views
 foreach ($views as $view) {
   $newSentences = getTranslate($view);
   if ($newSentences) {
@@ -42,6 +45,8 @@ foreach ($views as $view) {
 }
 
 
+
+// check if the language is supported
 if (!empty($argv[1])) {
   $locale = $argv[1];
   if (!in_array($locale, LANGS)) {
@@ -55,7 +60,7 @@ if (!empty($argv[1])) {
   $locale = DEFAULT_LANG;
 }
 
-
+// create or update translation file
 if (file_exists($transPath . "$locale.json")) {
   $translations = json_decode(file_get_contents($transPath . "$locale.json"), true);
   foreach ($sentences as $sentence) {
@@ -74,6 +79,67 @@ if (file_exists($transPath . "$locale.json")) {
   $translations = json_encode($translations, JSON_PRETTY_PRINT);
   file_put_contents($transPath . "$locale.json", $translations);
   echo "File $locale.json created in translation folder\n";
+}
+
+// find all routes
+if ($locale !== DEFAULT_LANG) {
+  $routes = [];
+
+  foreach ($controllers as $controller) {
+    $tempResult = strpos($controller["file"], "AbstractController.php");
+    if (gettype($tempResult) == "integer") {
+      $abstractController = true;
+    } else {
+      $abstractController = false;
+    }
+    if (!$abstractController) {
+      $pathFile = $controller["directory"] . "/" . $controller["file"];
+      if (is_file($pathFile)) {
+        $controllerName = str_replace(".php", "", $pathFile);
+        $controllerRoute = str_replace("Controller.php", "", $controller["file"]);
+        $controllerWithNamespace = 'App\Controller\\' . $controllerRoute . 'Controller';
+        $controller = new $controllerWithNamespace();
+        $methodsInController = get_class_methods($controller);
+        // add default index route
+        $routes[] = $controllerRoute;
+        foreach ($methodsInController as $method) {
+          if ($method !== "__construct") {
+            $methodInParent = new ReflectionMethod($controllerWithNamespace, $method);
+            if ($methodInParent->class !== "App\Controller\AbstractController") {
+              $routes[] = $controllerRoute . "/" . $method;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // create or update route translation file
+  if (file_exists($transPath . "routes$locale.json")) {
+    $routeTranslations = json_decode(file_get_contents($transPath . "routes$locale.json"), true);
+    foreach ($routes as $route) {
+      if (!array_key_exists($route, $routeTranslations)) {
+        $routeTranslations["/$route"] = "/$locale/$route";
+      }
+    }
+    // add default route
+    $homePage = HOME_PAGE;
+    $routeTranslations["/$homePage"] = "/$locale";
+    $routeTranslations = json_encode($routeTranslations, JSON_PRETTY_PRINT);
+    file_put_contents($transPath . "routes$locale.json", $routeTranslations);
+    echo "File routes$locale.json updated in translation folder\n";
+  } else {
+    $routeTranslations = [];
+    foreach ($routes as $route) {
+      $routeTranslations["/$route"] = "/$locale/$route";
+    }
+    // add default route
+    $homePage = HOME_PAGE;
+    $routeTranslations["/$homePage"] = "/$locale";
+    $routeTranslations = json_encode($routeTranslations, JSON_PRETTY_PRINT);
+    file_put_contents($transPath . "routes$locale.json", $routeTranslations);
+    echo "File routes$locale.json created in translation folder\n";
+  }
 }
 
 
