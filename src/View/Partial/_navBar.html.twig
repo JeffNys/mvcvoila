@@ -4,4 +4,8 @@
   <a href="{{ domain('/item') }}">{{ translate("Item") }}</a>
   |
   <a target="_blank" href="https://mvcvoila.com/docs">{{ translate("Help") }}</a>
+
+  {% if appTranslate %}
+    {{ include("Partial/_chooseLanguage.html.twig") }}
+  {% endif %}
 </nav>

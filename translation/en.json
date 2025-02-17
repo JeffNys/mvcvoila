@@ -30,5 +30,7 @@
   "with result of Controller": "with result of Controller",
   "show the result of the HomeController": "show the result of the HomeController",
   "this is a flash message": "this is a flash message",
-  "item": "item"
+  "item": "item",
+  "this is a flash message created in the controller": "this is a flash message created in the controller",
+  "go back in": "go back in"
 }

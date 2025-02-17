@@ -23,12 +23,14 @@
   "Back to list": "Retour \u00e0 la liste",
   "update": "mettre \u00e0 jour",
   "delete": "supprimer",
-  "Items": "\u00c9l\u00e9ments",
+  "Items": "El\u00e9ments",
   "the items pages are just to give an example, you can remove them if you don't need them": "les pages d'\u00e9l\u00e9ments sont juste pour donner un exemple, vous pouvez les supprimer si vous n'en avez pas besoin",
   "Nothing to display": "Rien \u00e0 afficher",
-  "Item": "\u00c9l\u00e9ment",
+  "Item": "El\u00e9ment",
   "Edit": "Modifier",
   "Home": "Accueil",
   "Help": "Aide",
-  "item": "élément"
+  "item": "\u00e9l\u00e9ment",
+  "this is a flash message created in the controller": "c'est un message flash cr\u00e9\u00e9 dans le contr\u00f4leur",
+  "go back in": "retournez dans"
 }

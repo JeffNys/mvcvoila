@@ -5,16 +5,18 @@
 
 {% block content %}
   <h1>{{ translate("Hello developer!") }}</h1>
-  <p>{{ translate("this is the default page of voila 1.6") }}</p>
+  <p>{{ translate("this is the default page of voila 1.8") }}</p>
   <p>{{ translate("to show this, you pass by:") }}</p>
   <ol>
     <li>/public/index.php</li>
     <li>/src/Controller/HomeController.php</li>
     <li>/src/View/layout.html.twig</li>
     <li>/src/View/Home/index.html.twig</li>
-    <li>go back in /src/Contoller/HomeController.php
+    <li>{{ translate("go back in") }}
+      /src/Contoller/HomeController.php
       {{ translate("with result of view") }}</li>
-    <li>go back in /public/index.php
+    <li>{{ translate("go back in") }}
+      /public/index.php
       {{ translate("with result of Controller") }}</li>
     <li>/public/index
       {{ translate("show the result of the HomeController") }}</li>

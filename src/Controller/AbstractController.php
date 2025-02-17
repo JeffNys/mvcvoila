@@ -38,8 +38,10 @@ abstract class AbstractController
         if (isset($_SESSION["user"])) {
             $this->twig->addGlobal("appUser", $_SESSION["user"]);
         }
+        $this->twig->addGlobal("appTranslate", TRANSLATE);
         $this->twig->addGlobal("appLang", $_SESSION['locale']);
         $this->twig->addGlobal("appLangs", LANGS);
+        $this->twig->addGlobal("appDefaultLang", DEFAULT_LANG);
 
         $getFlash = new TwigFunction('getFlash', function () {
             $messages = [];
