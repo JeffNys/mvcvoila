@@ -1,0 +1,14 @@
+{
+    "\/Error": "\/fr\/Error",
+    "\/Error\/error404": "\/fr\/Error\/error404",
+    "\/Error\/index": "\/fr\/Error\/index",
+    "\/Home": "\/fr",
+    "\/Home\/index": "\/fr\/Home\/index",
+    "\/Item": "\/fr\/Item",
+    "\/Item\/index": "\/fr\/Item\/index",
+    "\/Item\/show": "\/fr\/Item\/show",
+    "\/Item\/edit": "\/fr\/Item\/edit",
+    "\/Item\/add": "\/fr\/Item\/add",
+    "\/Item\/delete": "\/fr\/Item\/delete",
+    "\/home": "\/fr"
+}

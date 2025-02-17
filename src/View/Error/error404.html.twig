@@ -1,9 +1,10 @@
 {% extends 'layout.html.twig' %}
 
-{% block title %}Page not found{% endblock %}
+{% block title %}{{ translate("Page not found") }}
+{% endblock %}
 
 {% block content %}
-  <h1>Page not found</h1>
+  <h1>{{ translate("Page not found") }}</h1>
 
-  <p>this is a 404 error page</p>
+  <p>{{ translate("this is a 404 error page") }}</p>
 {% endblock %}

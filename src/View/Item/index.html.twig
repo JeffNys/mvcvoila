@@ -1,8 +1,11 @@
 {% extends 'layout.html.twig' %}
 
+{% block title %}{{ translate("Items") }}
+{% endblock %}
+
 {% block content %}
-  <h1>Items</h1>
-  <p>the items pages are just to give an example, you can remove them if you don't need them</p>
+  <h1>{{ translate("Items") }}</h1>
+  <p>{{ translate("the items pages are just to give an example, you can remove them if you don't need them") }}</p>
   <ul>
     {% for item in items %}
       <li>
@@ -10,8 +13,8 @@
           {{ item.title }}</a>
       </li>
     {% else %}
-      <li>Nothing to display</li>
+      <li>{{ translate("Nothing to display") }}</li>
     {% endfor %}
   </ul>
-  <a href="{{ domain('/item/add') }}">Add</a>
+  <a href="{{ domain('/item/add') }}">{{ translate("Add") }}</a>
 {% endblock %}

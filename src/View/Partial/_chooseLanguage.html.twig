@@ -1,0 +1,24 @@
+<div style="float:right">
+  <button onclick="showLangSelector()">{{ translate("Language") }}</button>
+  <div id="menuLangs" style="display:none;">
+    {% for lang in appLangs %}
+      {% if appDefaultLang == lang %}
+        <a style="background-color: white;" href="{{ domain('/' ) }}">{{ lang }}</a><br>
+      {% else %}
+        <a style="background-color: white;" href="{{ domain('/' ~ lang ) }}">{{ lang }}</a><br>
+      {% endif %}
+
+    {% endfor %}
+  </div>
+</div>
+
+<script>
+  function showLangSelector() {
+    let menu = document.getElementById("menuLangs");
+    if (menu.style.display === "none") {
+      menu.style.display = "block";
+    } else {
+      menu.style.display = "none";
+    }
+  }
+</script>

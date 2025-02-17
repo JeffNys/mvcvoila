@@ -17,4 +17,9 @@ class ErrorController extends AbstractController
   {
     return $this->twig->render('Error/error404.html.twig');
   }
+
+  public function index()
+  {
+    return $this->twig->render('Error/error404.html.twig');
+  }
 }
